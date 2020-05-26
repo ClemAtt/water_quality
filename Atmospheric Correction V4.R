@@ -22,6 +22,10 @@ cor2_path <- "E:/University College London/O'Sullivan, Aidan - SDG6/Landsat data
 
 setwd(c1_path)
 
+
+# Create lists of scene and site ids for processing -----------------------
+
+
 ### create list of dowloaded files
 dir_files <- list.files(pattern = '.TIF')
 sids <- str_split(dir_files,"__",simplify = T)[,1]
@@ -44,17 +48,19 @@ sid_eid_tp <- sid_eids[!(sid_eids %in% cor_eid)] %>% unique()
 ## list metadata files
 mtl_files <- list.files(pattern = 'MTL')
 
-#exceptions <- NULL
 
-#~~~ For loop ~~~#
+# For loop ----------------------------------------------------------------
+
+
+exceptions <- NULL
 
 ## range of sids to process
-sid_eid_tpf <- sid_eid_tp[60000:70000]
+sid_eid_tpf <- sid_eid_tp[50000:60000]
 
 ## progress bar setup
 total = length(sid_eid_tpf)
 pb <- tkProgressBar(title = "progress bar",min = 0, max = total)
-#times <- data.frame(t1=NA,t2=NA,t3=NA,t4=NA)
+times <- data.frame(t1=NA,t2=NA,t3=NA,t4=NA)
 
 for (sid_eid in sid_eid_tpf) {
   
@@ -165,8 +171,9 @@ for (sid_eid in sid_eid_tpf) {
   tt$t4 <- t4[[3]]
   times <- rbind(times,tt)
   
+  removeTmpFiles(h=0)
+  
 }
-
 
 
 mean(times$t1/times$t4,na.rm = T)
